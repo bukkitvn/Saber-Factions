@@ -1,12 +1,12 @@
 package com.massivecraft.factions.cmd;
 
+import com.gmail.nghikhoi1108.factions.upgrades.UpgradeType;
 import com.massivecraft.factions.*;
 import com.massivecraft.factions.cmd.audit.FLogType;
 import com.massivecraft.factions.discord.Discord;
 import com.massivecraft.factions.event.FPlayerJoinEvent;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.CC;
-import com.massivecraft.factions.zcore.fupgrades.UpgradeType;
 import com.massivecraft.factions.zcore.util.TL;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.exceptions.HierarchyException;
@@ -153,8 +153,8 @@ public class CmdJoin extends FCommand {
     }
 
     private int getFactionMemberLimit(Faction f) {
-        if (f.getUpgrade(UpgradeType.MEMBERS) == 0) return Conf.factionMemberLimit;
-        return Conf.factionMemberLimit + FactionsPlugin.getInstance().getConfig().getInt("fupgrades.MainMenu.Members.Member-Boost.level-" + f.getUpgrade(UpgradeType.MEMBERS));
+        if (f.getUpgrade(UpgradeType.MEMBERS.getId()) == 0) return Conf.factionMemberLimit;
+        return Conf.factionMemberLimit + (int) UpgradeType.MEMBERS.getTracker().getValue((byte) UpgradeType.MEMBERS.getCurrentLevel(f));
     }
 
     @Override

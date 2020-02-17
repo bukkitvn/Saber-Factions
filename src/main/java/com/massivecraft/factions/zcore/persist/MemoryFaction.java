@@ -1,5 +1,6 @@
 package com.massivecraft.factions.zcore.persist;
 
+import com.gmail.nghikhoi1108.factions.upgrades.Upgrade;
 import com.massivecraft.factions.*;
 import com.massivecraft.factions.discord.Discord;
 import com.massivecraft.factions.event.FPlayerLeaveEvent;
@@ -457,6 +458,10 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
         vault = new LazyLocation(vaultLocation);
     }
 
+    public int getUpgrade(String id) {
+        return upgrades.getOrDefault(id.toLowerCase(), 0);
+    }
+
     public int getUpgrade(UpgradeType upgrade) {
         if (upgrades.containsKey(upgrade.toString())) return upgrades.get(upgrade.toString());
         return 0;
@@ -473,17 +478,8 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
 
     private int getChestSize() {
         int size = FactionsPlugin.getInstance().getConfig().getInt("fchest.Default-Size");
-        switch (getUpgrade(UpgradeType.CHEST)) {
-            case 1:
-                size = FactionsPlugin.getInstance().getConfig().getInt("fupgrades.MainMenu.Chest.Chest-Size.level-1") * 9;
-                break;
-            case 2:
-                size = FactionsPlugin.getInstance().getConfig().getInt("fupgrades.MainMenu.Chest.Chest-Size.level-2") * 9;
-                break;
-            case 3:
-                size = FactionsPlugin.getInstance().getConfig().getInt("fupgrades.MainMenu.Chest.Chest-Size.level-3") * 9;
-                break;
-        }
+        int level = this.getUpgrade(com.gmail.nghikhoi1108.factions.upgrades.UpgradeType.CHEST.getId());
+        if (level > 0) size = (int) com.gmail.nghikhoi1108.factions.upgrades.UpgradeType.CHEST.getTracker().getValue((byte) level);
         return size * 9;
     }
 
@@ -544,6 +540,10 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
 
     public void setUpgrade(UpgradeType upgrade, int level) {
         upgrades.put(upgrade.toString(), level);
+    }
+
+    public void setUpgrade(String id, int level) {
+        upgrades.put(id.toLowerCase(), level);
     }
 
     public int getWallCheckMinutes() {

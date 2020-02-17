@@ -2,6 +2,7 @@ package com.massivecraft.factions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
+import com.gmail.nghikhoi1108.factions.FactionAddon;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.massivecraft.factions.cmd.*;
@@ -52,7 +53,6 @@ import java.io.*;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -196,6 +196,7 @@ public class FactionsPlugin extends MPlugin {
             divider();
             return;
         }
+
         //Update their config if needed
         // Updater.updateIfNeeded(getConfig());
         RegisteredServiceProvider<Economy> rsp = FactionsPlugin.this.getServer().getServicesManager().getRegistration(Economy.class);
@@ -203,6 +204,7 @@ public class FactionsPlugin extends MPlugin {
         hookedPlayervaults = setupPlayervaults();
         FPlayers.getInstance().load();
         Factions.getInstance().load();
+        FactionAddon.getInstance().onEnable(this);
 
         for (FPlayer fPlayer : FPlayers.getInstance().getAllFPlayers()) {
             Faction faction = Factions.getInstance().getFactionById(fPlayer.getFactionId());

@@ -12,9 +12,6 @@
 # maven
 /target
 
-# vim
-.*.sw[a-saberFactions]
-
 # various other potential build files
 /build
 /bin

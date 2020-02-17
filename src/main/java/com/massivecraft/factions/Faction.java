@@ -155,7 +155,11 @@ public interface Faction extends EconomyParticipator {
 
     void setUpgrade(UpgradeType upgrade, int level);
 
+    void setUpgrade(String upgrade, int level);
+
     int getUpgrade(UpgradeType upgrade);
+
+    int getUpgrade(String upgrade);
 
     boolean isInvited(FPlayer fplayer);
 

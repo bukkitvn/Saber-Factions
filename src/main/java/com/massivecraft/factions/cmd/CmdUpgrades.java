@@ -1,5 +1,6 @@
 package com.massivecraft.factions.cmd;
 
+import com.gmail.nghikhoi1108.factions.upgrades.UpgradeHandler;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.zcore.fupgrades.FUpgradeFrame;
@@ -27,7 +28,8 @@ public class CmdUpgrades extends FCommand {
             context.fPlayer.msg(TL.COMMAND_UPGRADES_DISABLED);
             return;
         }
-        new FUpgradeFrame(context.faction).buildGUI(context.fPlayer);
+        //new FUpgradeFrame(context.faction).buildGUI(context.fPlayer);
+        UpgradeHandler.open(context.fPlayer);
     }
 
     @Override

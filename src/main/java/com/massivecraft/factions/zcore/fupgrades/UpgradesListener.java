@@ -183,6 +183,7 @@ public class UpgradesListener implements Listener {
             e.setDamage(damage + damage / 100.0 * increase);
         }
     }
+
     @EventHandler
     public void onArmorDamage(PlayerItemDamageEvent e) {
         if (FPlayers.getInstance().getByPlayer(e.getPlayer()) == null) {

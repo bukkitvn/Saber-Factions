@@ -31,6 +31,10 @@ public class Econ {
     private static final DecimalFormat format = new DecimalFormat(TL.ECON_FORMAT.toString());
     private static Economy econ = null;
 
+    public static Economy getEcon() {
+        return econ;
+    }
+
     public static void setup() {
         if (isSetup()) {
             return;
