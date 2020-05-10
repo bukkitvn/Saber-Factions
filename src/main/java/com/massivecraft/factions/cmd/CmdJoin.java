@@ -56,7 +56,7 @@ public class CmdJoin extends FCommand {
             return;
         }
 
-        if (Conf.factionMemberLimit > 0 && faction.getFPlayers().size() >= getFactionMemberLimit(faction)) {
+        if (!faction.altInvited(fplayer) && Conf.factionMemberLimit > 0 && faction.getFPlayers().size() >= getFactionMemberLimit(faction)) {
             context.msg(TL.COMMAND_JOIN_ATLIMIT, faction.getTag(context.fPlayer), getFactionMemberLimit(faction), fplayer.describeTo(context.fPlayer, false));
             return;
         }
@@ -81,7 +81,7 @@ public class CmdJoin extends FCommand {
 
         int altLimit = Conf.factionAltMemberLimit;
 
-        if (altLimit > 0 && faction.getAltPlayers().size() >= altLimit && !faction.altInvited(context.fPlayer)) {
+        if (altLimit > 0 && faction.getAltPlayers().size() >= altLimit && faction.altInvited(context.fPlayer)) {
             context.msg(TL.COMMAND_JOIN_ATLIMIT, faction.getTag(context.fPlayer), altLimit, fplayer.describeTo(context.fPlayer, false));
             return;
         }
@@ -115,8 +115,6 @@ public class CmdJoin extends FCommand {
             fplayer.msg(TL.COMMAND_JOIN_MOVED, context.fPlayer.describeTo(fplayer, true), faction.getTag(fplayer));
         }
 
-        faction.msg(TL.COMMAND_JOIN_JOINED, fplayer.describeTo(faction, true));
-
         fplayer.resetFactionData();
 
         if (faction.altInvited(fplayer)) {
@@ -127,6 +125,7 @@ public class CmdJoin extends FCommand {
         }
 
         faction.deinvite(fplayer);
+
         try {
             context.fPlayer.setRole(faction.getDefaultRole());
             FactionsPlugin.instance.logFactionEvent(faction, FLogType.INVITES, context.fPlayer.getName(), CC.Green + "joined", "the faction");
@@ -142,6 +141,8 @@ public class CmdJoin extends FCommand {
         } catch (HierarchyException e) {
             System.out.print(e.getMessage());
         }
+
+        faction.msg(TL.COMMAND_JOIN_JOINED, fplayer.describeTo(faction, true));
 
         if (Conf.logFactionJoin) {
             if (samePlayer) {
