@@ -4,7 +4,6 @@ import com.massivecraft.factions.*;
 import com.massivecraft.factions.cmd.CmdFGlobal;
 import com.massivecraft.factions.cmd.CmdFly;
 import com.massivecraft.factions.cmd.CmdSeeChunk;
-import com.massivecraft.factions.cmd.FCmdRoot;
 import com.massivecraft.factions.cmd.audit.FLogType;
 import com.massivecraft.factions.cmd.logout.LogoutHandler;
 import com.massivecraft.factions.cmd.wild.CmdWild;
@@ -36,8 +35,6 @@ import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Boat;
-import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -57,7 +54,9 @@ import java.util.logging.Level;
 
 public class FactionsPlayerListener implements Listener {
 
+    public final static Map<UUID, Location> lastLocations = new HashMap<>();
     public static Set<FLocation> corners;
+    public static BukkitTask positionTask = null;
     /**
      * @author FactionsUUID Team
      */
@@ -655,9 +654,6 @@ public class FactionsPlayerListener implements Listener {
         return (result.length() == 3 ? result + "0" : result) + "/hrs ago";
     }
 
-    public static BukkitTask positionTask = null;
-    public final static Map<UUID, Location> lastLocations = new HashMap<>();
-
     public void startPositionCheck() {
         positionTask = Bukkit.getScheduler().runTaskTimer(FactionsPlugin.getInstance(), () -> {
             if (lastLocations.isEmpty()) return;
@@ -741,7 +737,9 @@ public class FactionsPlayerListener implements Listener {
                     me.attemptClaim(me.getAutoClaimFor(), newLocation, true);
                 }
                 FactionsPlugin.instance.logFactionEvent(me.getAutoClaimFor(), FLogType.CHUNK_CLAIMS, me.getName(), CC.GreenB + "CLAIMED", String.valueOf(1), (new FLocation(player.getLocation())).formatXAndZ(","));
-                if (Conf.disableFlightOnFactionClaimChange) CmdFly.disableFlight(me);
+                if (Conf.disableFlightOnFactionClaimChange && FactionsPlugin.getInstance().getConfig().getBoolean("enable-faction-flight"))
+                    CmdFly.disableFlight(me);
+
             } else if (me.isAutoSafeClaimEnabled()) {
                 if (!Permission.MANAGE_SAFE_ZONE.has(player)) {
                     me.setIsAutoSafeClaimEnabled(false);
@@ -863,7 +861,7 @@ public class FactionsPlayerListener implements Listener {
         Block block = event.getClickedBlock();
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK && block.getType() == XMaterial.GRASS_BLOCK.parseMaterial()
                 && event.hasItem() && event.getItem().getType() == XMaterial.BONE_MEAL.parseMaterial()) {
-            if (!FactionsBlockListener.playerCanBuildDestroyBlock(event.getPlayer(), block.getLocation(), PermissableAction.BUILD.name(), true)) {
+            if (!FactionsBlockListener.playerCanBuildDestroyBlock(event.getPlayer(), block.getLocation(), PermissableAction.BUILD, true)) {
                 FPlayer me = FPlayers.getInstance().getById(event.getPlayer().getUniqueId().toString());
                 Faction myFaction = me.getFaction();
 

@@ -4,7 +4,7 @@ import com.massivecraft.factions.*;
 import com.massivecraft.factions.event.PowerLossEvent;
 import com.massivecraft.factions.struct.Relation;
 import com.massivecraft.factions.util.MiscUtil;
-import com.massivecraft.factions.util.timer.type.GraceTimer;
+import com.massivecraft.factions.zcore.fperms.PermissableAction;
 import com.massivecraft.factions.zcore.util.TL;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -138,7 +138,7 @@ public class FactionsEntityListener implements Listener {
                     // Run the check for a player
                     if (damager instanceof Player) {
 
-                        if (!FactionsBlockListener.playerCanBuildDestroyBlock((Player) damager, damagee.getLocation(), "destroy", false))
+                        if (!FactionsBlockListener.playerCanBuildDestroyBlock((Player) damager, damagee.getLocation(), PermissableAction.DESTROY, false))
                             event.setCancelled(true);
 
                     } else {
@@ -258,8 +258,6 @@ public class FactionsEntityListener implements Listener {
 
     private boolean checkExplosionForBlock(Entity boomer, Block block) {
         Faction faction = Board.getInstance().getFactionAt(new FLocation(block.getLocation()));
-
-        if(FactionsPlugin.getInstance().getTimerManager().graceTimer.getRemaining() > 0) return false;
 
         if (faction.noExplosionsInTerritory() || (faction.isPeaceful() && Conf.peacefulTerritoryDisableBoom))
             return false;
@@ -510,7 +508,7 @@ public class FactionsEntityListener implements Listener {
         Player p = (Player) e.getRemover();
 
         if (e.getEntity().getType() == EntityType.PAINTING || e.getEntity().getType() == EntityType.ITEM_FRAME) {
-            if (!FactionsBlockListener.playerCanBuildDestroyBlock(p, e.getEntity().getLocation(), "destroy", false)) {
+            if (!FactionsBlockListener.playerCanBuildDestroyBlock(p, e.getEntity().getLocation(), PermissableAction.DESTROY, false)) {
                 e.setCancelled(true);
             }
         }
@@ -521,7 +519,7 @@ public class FactionsEntityListener implements Listener {
         if (e.getPlayer() == null) return;
 
         if (e.getEntity().getType() == EntityType.PAINTING || e.getEntity().getType() == EntityType.ITEM_FRAME) {
-            if (!FactionsBlockListener.playerCanBuildDestroyBlock(e.getPlayer(), e.getBlock().getLocation(), "build", false)) {
+            if (!FactionsBlockListener.playerCanBuildDestroyBlock(e.getPlayer(), e.getBlock().getLocation(), PermissableAction.BUILD, false)) {
                 e.setCancelled(true);
                 e.getPlayer().updateInventory();
             }
@@ -628,7 +626,7 @@ public class FactionsEntityListener implements Listener {
         if (event.getRightClicked() == null) return;
         if (!event.getRightClicked().getType().equals(EntityType.ITEM_FRAME)) return;
 
-        if (!FactionsBlockListener.playerCanBuildDestroyBlock(event.getPlayer(), event.getRightClicked().getLocation(), "build", false)) {
+        if (!FactionsBlockListener.playerCanBuildDestroyBlock(event.getPlayer(), event.getRightClicked().getLocation(), PermissableAction.BUILD, false)) {
             event.setCancelled(true);
         }
     }

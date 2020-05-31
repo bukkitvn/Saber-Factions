@@ -1457,8 +1457,6 @@ Wild:
   Enabled: true
   # Time to wait in seconds #
   Wait: 5
-  # World players will be teleported to #
-  World: 'World'
   # General GUI Settings #
   GUI:
     Name: 'Teleporter'
@@ -1469,6 +1467,7 @@ Wild:
   Zones:
     # You may create your own zones here please just follow the original format #
    Close:
+     World: world
      Range:
        MinX: -200
        MaxX: 200
@@ -1483,6 +1482,7 @@ Wild:
      Name: '&cLow Range'
      Slot: 1
    Medium:
+     World: world
      Range:
        MinX: -400
        MaxX: 400
@@ -1497,6 +1497,7 @@ Wild:
      Name: '&cMedium Range'
      Slot: 4
    Far:
+     World: world
      Range:
        MinX: -800
        MaxX: 800
