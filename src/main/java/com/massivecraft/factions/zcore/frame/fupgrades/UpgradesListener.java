@@ -170,6 +170,7 @@ public class UpgradesListener implements Listener {
         }
     }
 
+
     @EventHandler
     public void onArmorDamage(PlayerItemDamageEvent e) {
         if (FPlayers.getInstance().getByPlayer(e.getPlayer()) == null) return;
