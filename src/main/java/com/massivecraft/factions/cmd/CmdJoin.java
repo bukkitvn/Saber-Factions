@@ -4,11 +4,8 @@ import com.gmail.nghikhoi1108.factions.upgrades.UpgradeType;
 import com.massivecraft.factions.*;
 import com.massivecraft.factions.event.FPlayerJoinEvent;
 import com.massivecraft.factions.struct.Permission;
-<<<<<<< HEAD
 import com.massivecraft.factions.util.CC;
-=======
-import com.massivecraft.factions.zcore.frame.fupgrades.UpgradeType;
->>>>>>> e84c69f2b007ea2b996551ecb73baf45557202e7
+import com.gmail.nghikhoi1108.factions.upgrades.UpgradeType;
 import com.massivecraft.factions.zcore.util.TL;
 import org.bukkit.Bukkit;
 
